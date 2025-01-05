@@ -1,6 +1,7 @@
 program XFrames;
 
 {$mode objfpc}{$H+}
+{$WARN 6058 off : Call to subroutine "$1" marked as inline is not inlined}
 
 uses
   Math, fpjson, sysutils, Classes, Generics.Collections, fgl;
@@ -60,11 +61,6 @@ const
   ImGuiCol_NavWindowingHighlight = 50;
   ImGuiCol_NavWindowingDimBg = 51;
   ImGuiCol_ModalWindowDimBg = 52;
-
-  ImGuiCol_COUNT = 53;
-
-type
-  TImGuiCol = Integer;
 
 type
   TFontDef = record
@@ -183,14 +179,14 @@ begin
 
         colorDefs.Add(IntToStr(theme2.Keys[i]), HEXAJsonArray);
 
-        WriteLn('Key: ', IntToStr(theme2.Keys[i]), 
-                ', Color: ', theme2.Data[i].color, 
+        WriteLn('Key: ', IntToStr(theme2.Keys[i]),
+                ', Color: ', theme2.Data[i].color,
                 ', Alpha: ', FloatToStr(theme2.Data[i].alpha));
       end;
 
     themeDef.Add('colors', colorDefs);
 
-    
+
     SetLength(fontDefArray, Length(fontSizes));
     for i := 0 to High(fontSizes) do
     begin
@@ -199,7 +195,7 @@ begin
     end;
 
     fontDefs := TJSONObject.Create;
-  
+
     defsArray := TJSONArray.Create;
     for i := 0 to High(fontDefArray) do
     begin
