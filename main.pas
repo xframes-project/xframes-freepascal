@@ -83,6 +83,92 @@ end;
 type
   TThemeMap = specialize TFPGMap<Integer, THEXA>;
 
+type
+  TOnInitCb = procedure; cdecl;
+  TOnTextChangedCb = procedure(id: Integer; text: PChar); cdecl;
+  TOnComboChangedCb = procedure(id: Integer; index: Integer); cdecl;
+  TOnNumericValueChangedCb = procedure(id: Integer; value: Single); cdecl;
+  TOnBooleanValueChangedCb = procedure(id: Integer; value: Boolean); cdecl;
+  TOnMultipleNumericValuesChangedCb = procedure(id: Integer; values: PSingle; numValues: Integer); cdecl;
+  TOnClickCb = procedure(id: Integer); cdecl;
+
+procedure init(
+  assetsBasePath: PChar;
+  rawFontDefinitions: PChar;
+  rawStyleOverrideDefinitions: PChar;
+  onInit: TOnInitCb;
+  onTextChanged: TOnTextChangedCb;
+  onComboChanged: TOnComboChangedCb;
+  onNumericValueChanged: TOnNumericValueChangedCb;
+  onBooleanValueChanged: TOnBooleanValueChangedCb;
+  onMultipleNumericValuesChanged: TOnMultipleNumericValuesChangedCb;
+  onClick: TOnClickCb
+); cdecl; external 'xframesshared.dll';
+
+procedure setElement(elementJson: PChar); cdecl; external 'xframesshared.dll';
+
+procedure setChildren(id: Integer; childrenIds: PChar); cdecl; external 'xframesshared.dll';
+
+
+procedure MyOnInit; cdecl;
+var
+  rootNode: TJSONObject;
+  unformattedText: TJSONObject;
+  childrenIds: TJSONArray;
+begin
+  rootNode := TJSONObject.Create;
+  rootNode.Add('type', 'node');
+  rootNode.Add('id', 0);
+  rootNode.Add('root', True);
+
+  unformattedText := TJSONObject.Create;
+  unformattedText.Add('type', 'unformatted-text');
+  unformattedText.Add('id', 1);
+  unformattedText.Add('text', 'Hello, world');
+
+  childrenIds := TJSONArray.Create;
+  childrenIds.Add(1);
+
+  setElement(PChar(rootNode.AsJSON));
+  setElement(PChar(unformattedText.AsJSON));
+  setChildren(0, PChar(childrenIds.AsJSON));
+end;
+
+procedure MyOnTextChanged(id: Integer; text: PChar); cdecl;
+begin
+  WriteLn('Text changed: ID = ', id, ', Text = ', text);
+end;
+
+procedure MyOnComboChanged(id: Integer; index: Integer); cdecl;
+begin
+  WriteLn('Combo changed: ID = ', id, ', Index = ', index);
+end;
+
+procedure MyOnNumericValueChanged(id: Integer; value: Single); cdecl;
+begin
+  WriteLn('Numeric value changed: ID = ', id, ', Value = ', value:0:2);
+end;
+
+procedure MyOnBooleanValueChanged(id: Integer; value: Boolean); cdecl;
+begin
+  WriteLn('Boolean value changed: ID = ', id, ', Value = ', value);
+end;
+
+procedure MyOnMultipleNumericValuesChanged(id: Integer; values: PSingle; numValues: Integer); cdecl;
+var
+  i: Integer;
+begin
+  Write('Multiple numeric values changed: ID = ', id, ', Values = ');
+  for i := 0 to numValues - 1 do
+    Write(values[i]:0:2, ' ');
+  WriteLn;
+end;
+
+procedure MyOnClick(id: Integer); cdecl;
+begin
+  WriteLn('Click event: ID = ', id);
+end;
+
 var
   themeDef: TJSONObject;
   colorDefs: TJSONObject;
@@ -175,13 +261,8 @@ begin
         HEXAJsonArray := TJSONArray.Create;
         HEXAJsonArray.Add(theme2.Data[i].color);
         HEXAJsonArray.Add(theme2.Data[i].alpha);
-        // HEXAJsonArray.Add(RoundTo(theme2.Data[i].alpha, -2));
 
         colorDefs.Add(IntToStr(theme2.Keys[i]), HEXAJsonArray);
-
-        WriteLn('Key: ', IntToStr(theme2.Keys[i]),
-                ', Color: ', theme2.Data[i].color,
-                ', Alpha: ', FloatToStr(theme2.Data[i].alpha));
       end;
 
     themeDef.Add('colors', colorDefs);
@@ -207,7 +288,25 @@ begin
     end;
     fontDefs.Add('defs', defsArray);
 
-    WriteLn('Generated JSON: ', themeDef.AsJSON);
+    init(
+      './assets',
+      PChar(fontDefs.AsJSON),
+      PChar(themeDef.AsJSON),
+      @MyOnInit,
+      @MyOnTextChanged,
+      @MyOnComboChanged,
+      @MyOnNumericValueChanged,
+      @MyOnBooleanValueChanged,
+      @MyOnMultipleNumericValuesChanged,
+      @MyOnClick
+    );
+
+    WriteLn('Press CTRL+C to exit.');
+
+    while True do
+    begin
+      Sleep(1000);
+    end;
   finally
     fontDefs.Free;
     theme2Colors.Free;
