@@ -25,3 +25,6 @@ Compile for x64
 Run `main.exe`
 
 ## Screenshots
+
+![image](https://github.com/user-attachments/assets/a962ec9b-03e0-4ff5-9335-f8e82f3cb4c6)
+
