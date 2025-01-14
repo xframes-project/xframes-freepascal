@@ -9,6 +9,7 @@
 sudo apt update
 sudo apt install fpc
 
+This is currently seg-faulting, however.
 
 #### Windows
 
