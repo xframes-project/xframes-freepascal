@@ -9,7 +9,15 @@
 sudo apt update
 sudo apt install fpc
 
-This is currently seg-faulting, however.
+I have had to make a 'tweak' to the logic to prevent 'Invalid floating point operation' to be thrown.
+
+`rootNode.Add('id', 0.0);`
+
+instead of
+
+`rootNode.Add('id', 0);`
+
+On Windows `rootNode.Add('id', 0);` works just fine.
 
 #### Windows
 
