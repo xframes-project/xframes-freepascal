@@ -41,5 +41,10 @@ Run `main.exe`
 
 ## Screenshots
 
+Windows 11
+
 ![image](https://github.com/user-attachments/assets/a962ec9b-03e0-4ff5-9335-f8e82f3cb4c6)
 
+Ubuntu 24.04
+
+![Screenshot from 2025-01-15 00-28-16](https://github.com/user-attachments/assets/8edaa163-ce4c-47fa-bd88-ce00fea050fa)
