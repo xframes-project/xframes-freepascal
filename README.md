@@ -4,6 +4,12 @@
 
 ### Install Free Pascal
 
+#### Ubuntu
+
+sudo apt update
+sudo apt install fpc
+
+
 #### Windows
 
 There's no native x64 compiler for Windows. You need to first download the 32 bit compiler from

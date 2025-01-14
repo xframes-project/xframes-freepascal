@@ -1,5 +1,8 @@
 *.exe
 *.dll
 *.so
+*.so.*
+*.res
 *.o
 *.a
+main
