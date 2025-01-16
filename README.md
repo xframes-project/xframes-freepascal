@@ -6,8 +6,9 @@
 
 #### Ubuntu
 
-sudo apt update
-sudo apt install fpc
+`sudo apt install fpc`
+
+##### x64 arch
 
 I have had to make a 'tweak' to the logic to prevent 'Invalid floating point operation' to be thrown.
 
@@ -17,7 +18,7 @@ instead of
 
 `rootNode.Add('id', 0);`
 
-On Windows `rootNode.Add('id', 0);` works just fine.
+On Windows and Raspberry Pi `rootNode.Add('id', 0);` works just fine.
 
 #### Windows
 

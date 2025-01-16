@@ -118,8 +118,8 @@ var
 begin
   rootNode := TJSONObject.Create;
   rootNode.Add('type', 'node');
-  // On Linux, passing `0` throws 'Invalid floating point operation'
-  rootNode.Add('id', 0.0);
+  // On x64-linux, passing `0` throws 'Invalid floating point operation' (appears to work fine on arm64-linux)
+  rootNode.Add('id', 0);
   rootNode.Add('root', True);
 
   unformattedText := TJSONObject.Create;
